@@ -1,7 +1,6 @@
 <?php
 
-class Webdia_App
-{
+class Webdia_App {
     protected $version = '0.3.0';
     protected $copyright = 'Copyright © 2010-2013 Sylvain Lévesque';
     protected $argv;
@@ -154,8 +153,8 @@ class Webdia_App
         $this->echoc( 'CONTACT US' . PHP_EOL, 'white' );
         $this->echoc( 'Author: ', 'light_gray' );
         $this->echoc( 'Sylvain Lévesque <slevesque@gezere.com>.' . PHP_EOL, 'light_red' );
-        $this->echoc( 'Website: ', 'lignt_gray' );
-        $this->echoc( 'http://webdia.gezere.com' . PHP_EOL . PHP_EOL, 'light_red' );
+        $this->echoc( 'Website: ' . PHP_EOL . PHP_EOL, 'lignt_gray' );
+        //$this->echoc( 'http://webdia.gezere.com' . PHP_EOL . PHP_EOL, 'light_red' );
 
         $this->echoc( 'LICENSE' . PHP_EOL, 'white' );
         $this->echoc( 'This program is free software: you can redistribute it and/or modify' . PHP_EOL, 'light_gray' );
