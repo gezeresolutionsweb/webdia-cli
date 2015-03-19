@@ -1,4 +1,4 @@
-# Webdia 0.3.0
+# Webdia 0.1.0 (Tremblay)
 
 An online database modeling and command line tools (dia, sql)
 
@@ -50,51 +50,34 @@ Sylvain Lévesque <slevesque@gezere.com>
 
 ## MILESTONES
 
-### Version 0.4
+### 0.x (Tremblay)
 
-  * Complete Writer::Mysql.
-  * Complete Reader::Sql
+  * Deliver initial release.
+  * Complete basic CLI tools.
+  * Complete basic CLI readers and writers.
+  * Package the application the right way.
+
+### 1.x (Gagnon)
+
   * Have a start of a web modeling tools
   * Being able to convert from the GUI.
   * Open and save Dia schema files.
+  * Manage a list of schema project.
 
-### Version later
+### 2.x (Roy)
 
   * Manager user access.
-  * Export schema in PDF from GUI.
-  * Export schema in DIA from GUI.
-  * Export schema in WIKI from GUI.
-  * Export schema in SQL from GUI.
-  * Manager primary (protected), secondary (public) keys and standard (private) fields.
+  * Hava some collaboration in the webapp.
   * Use dia stencils.
 
-### Version after later
+### 3.x (Côté)
 
   * Manage schema versioning.
   * Generate scaffold application base on a schema and CakePHP.
 
 
-
 ## VERSIONS HISTORY
 
-### 0.3.0
-
-* Major refactoring in PHP 5 complying with PSR-0
-* Integration of some Gezere Library and Zend Framwork classes.
-* Webdia is now only working with database schema made with UML stencil.
-* Merged all command line tools (dia2sql, dia2wiki, mssql2dia, sql2dia) into a single one named "webdia" for simplicity.
-* Webdia command line parameters has completely changed.
-* You can now use Webdia on the command line with some colors :)
-
-### 0.2.0
-
-* Added mssql2dia command line tools.
-
-### 0.1.2
-
-* Added support for default values in dia2sql, sql2dia and dia2wiki.
-* Removed .php extension to console script.
-
-### 0.1.0
+### 0.1.0 (Tremblay)
 
 * Initial version
