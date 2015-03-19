@@ -6,7 +6,6 @@ define( 'PS', PATH_SEPARATOR );
 
 define( 'ROOT_PATH', dirname( __FILE__ ) . DS );
 define( 'LIBRARY_PATH', ROOT_PATH . 'lib' . DS );
-define( 'TMP_PATH', DS . 'tmp' . DS );
 
 // Set autoloading
 require LIBRARY_PATH . 'Gezere' . DS . 'Autoloader.php';
