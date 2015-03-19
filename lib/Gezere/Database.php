@@ -28,13 +28,19 @@
  * @link      http://www.gezere.com/
  */
 
-class Gezere_Database
-{
+class Gezere_Database {
+    private $dsn;
+    private $selectedDb;
+
     public function __construct( $dsn ) {
-        $dsn = self::parseDsn( $dsn );
-        $this->connect( $dsn[ 'server' ], $dsn[ 'user' ], $dsn[ 'password' ] );
-        $this->selectDb( $dsn[ 'database' ] );
+        $this->dsn = self::parseDsn( $dsn );
+        $this->connect( $this->dsn[ 'server' ], $this->dsn[ 'user' ], $this->dsn[ 'password' ] );
+        $this->selectDb( $this->dsn[ 'database' ] );
         $this->query( 'SET NAMES "UTF8"' );
+    }
+
+    public function getSelectedDb() {
+        return $this->selectedDb;
     }
 
     private static function parseDsn( $dsn ) {	
@@ -113,8 +119,8 @@ class Gezere_Database
         }
     }
 
-    public function selectDb( $database, $link = '' )
-    {
+    public function selectDb( $database, $link = '' ) {
+        $this->selectedDb = $database;
         if( $link != '' ) {
             return mysql_select_db($database, $link);
         } else {
@@ -213,4 +219,7 @@ class Gezere_Database
         return $items;
     }
 
+    public function realEscapeString( $string ) {
+        return mysql_real_escape_string( $string );
+    }
 }
