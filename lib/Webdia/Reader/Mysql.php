@@ -1,60 +1,47 @@
 <?php
 
-class Webdia_Reader_Mysql implements Webdia_Reader_Interface
-{
-    private $getopt;
-    private $database;
-    private $xml;
+class Webdia_Reader_Mysql extends Webdia_Reader implements Webdia_Reader_Interface {
+    private $db;
 
     public function __construct( \Zend\Console\GetOpt $getopt ) {
-        $this->getopt = $getopt;
-        $this->database = new Webdia_Database( 'default' );
+        parent::__construct( $getopt );
+        $this->db = new Gezere_Database( $this->getopt->idsn ) or die( 'Can\'t get mysql connexion !' . PHP_EOL );
     }
 
-    public function validateOptions() {
-        // @todo Verify that required options are there.
+    public function getTables() {
+        $sql = 'SELECT `TABLE_NAME` as `name`';
+        $sql .= ', `TABLE_COMMENT` as `comment`';
+        $sql .= ' FROM `information_schema`.`TABLES`';
+        $sql .= ' WHERE `TABLE_TYPE` = "BASE TABLE"';
+        $sql .= ' AND `TABLE_SCHEMA` = "'. $this->db->getSelectedDb() . '";';
+
+        return $this->db->queryAssoc( $sql );
     }
 
-    public function read() {
-        // Parse DSN
-        $dsn = Webdia_Database::parseDsn( $this->getopt->idsn );
-        var_dump( $dsn );
-        die();
+    public function getViews() {
+        $sql = 'SELECT `TABLE_NAME` as `name`';
+        $sql .= ', `TABLE_COMMENT` as `comment`';
+        $sql .= ' FROM `information_schema`.`TABLES`';
+        $sql .= ' WHERE `TABLE_TYPE` = "VIEW"';
+        $sql .= ' AND `TABLE_SCHEMA` = "'. $this->db->getSelectedDb() . '";';
 
-        // Get connexion
-        $link = mysql_connect( $dsn[ 'server' ], $dsn[ 'user' ], $dsn[ 'password' ] ) or die( 'Can\'t get mysql connexion !' . PHP_EOL );
-        var_dump( $dsn );
-        die( 'end' );
+        return $this->db->queryAssoc( $sql );
+    }
 
-        // Select database
-        $ret = mysql_select_db( $dsn[ 'database' ], $link ) or die( 'Can\'t select database !' . PHP_EOL );
+    public function getFields( $table ) {
+        $sql = 'SELECT `COLUMN_NAME` AS "name"';
+        $sql .= ', `COLUMN_TYPE` AS "type"';
+        $sql .= ', `COLUMN_COMMENT` AS "comment"';
+        $sql .= ', `IS_NULLABLE` AS "nullable"';
+        $sql .= ', if( `COLUMN_KEY` = "PRI", 1, 0 ) as "primary_key"';
+        $sql .= ', `COLUMN_DEFAULT` AS "default"';
+        $sql .= ', `EXTRA` AS "extra"';
+        $sql .= ', if( `COLUMN_KEY` = "UNI", 1, 0 ) AS "unique"';
+        $sql .= ' FROM `information_schema`.`COLUMNS`';
+        $sql .= ' WHERE `TABLE_SCHEMA` = "'. $this->db->getSelectedDb() . '"';
+        $sql .= ' AND `TABLE_NAME` = "' . $this->db->realEscapeString( $table ) . '"';
+        $sql .= ' ORDER BY `ORDINAL_POSITION`;';
 
-        // Get tables
-        $sql = 'SHOW TABLES';
-        $tables = mysql_query( $sql, $link );
-
-        $arrTables = array();
-
-        while( $table = mysql_fetch_array( $tables ) ) {
-            $objTable = new Webdia_Table( $table[ 0 ] );
-
-            // Get table's fields.
-            $sql = 'SHOW COLUMNS FROM `' . $dsn[ 'database' ] . '`' . '.`' . $table[ 0 ] . '`';
-
-            $fields = mysql_query( $sql ) or die( mysql_error());
-
-            while( $field = mysql_fetch_array( $fields ) ) {
-                $objTable->addField( new Webdia_Field( array(
-                    'name' => $field[ 'Field' ],
-                    'type' => $field[ 'Type' ],
-                    'default' => $field[ 'Default' ]
-                ) ) );
-            }
-
-            // Added to database
-            $this->database->addTable( $objTable );
-        }
-
-        return $this->database;
+        return $this->db->queryAssoc( $sql );
     }
 }

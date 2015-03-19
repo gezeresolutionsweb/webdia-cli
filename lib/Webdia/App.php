@@ -70,12 +70,11 @@ class Webdia_App {
         // Determine adequate reader
         $classname = 'Webdia_Reader_' . ucfirst( $inputFormat );
         $reader = new $classname( $this->getopt );
-        $reader->read();
 
         // Determine adequate writer
         $classname = 'Webdia_Writer_' . ucfirst( $outputFormat );
-        $writer = new $classname( $this->getopt );
-        //xdebug_var_dump( $writer->write( $reader->read() ) );
+        $writer = new $classname( $this->getopt, $reader );
+        $writer->write();
     }
 
     // Echo colored string;

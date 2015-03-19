@@ -1,45 +1,28 @@
 <?php
 
-class Webdia_Writer_Wiki implements Webdia_Writer_Interface
-{
-    private $getopt;
-
-    public function __construct( \Zend\Console\Getopt $getopt ) { 
-        $this->getopt = $getopt;
-    }
-
-    public function write( Webdia_Database $database ) {
+class Webdia_Writer_Wiki extends Webdia_Writer implements Webdia_Writer_Interface {
+    public function write() {
         $fp = fopen( $this->getopt->of, 'w' );
 
         fwrite( $fp, '====== Dictionnaire de données ======' . PHP_EOL . PHP_EOL );
 
-        foreach( $database->getTables() as $table ) {
-            fwrite( $fp, '=====' . $table->getName() . '=====' . PHP_EOL . PHP_EOL );
-            //        fwrite( $fp, $table->comment . PHP_EOL . PHP_EOL );
+        foreach( $this->reader->getTables() as $table ) {
+            fwrite( $fp, '=====' . $table[ 'name' ] . '=====' . PHP_EOL . PHP_EOL );
 
             $isFirst = true;
 
-            foreach( $table->getFields() as $field ) {
-                fwrite( $fp, '**' . $field->getName() . '**' . PHP_EOL . PHP_EOL );
-                //                fwrite( $fp, $field[ 'comment' ] . PHP_EOL . PHP_EOL );
-                fwrite( $fp, '^ Type | ' . $field->getType() . ' |' . PHP_EOL );
+            foreach( $table->getFields( $table[ 'name' ] ) as $field ) {
+                fwrite( $fp, '**' . $field[ 'name' ] . '**' . PHP_EOL . PHP_EOL );
+                fwrite( $fp, '^ Type | ' . $field[ 'type' ] . ' |' . PHP_EOL );
 
-                if( /*$field[ 'visibility' ] == 2*/ true === $isFirst ) {
+                if( true === $isFirst ) {
                     fwrite( $fp, '^ Clé primaire | Oui |' . PHP_EOL );
                 } else {
                     fwrite( $fp, '^ Clé primaire | |' . PHP_EOL );
                 }
-                /*
-                if( $field[ 'visibility' ] == 0 ) {
-                    fwrite( $fp, '^ Clé externe | Oui |' . PHP_EOL );
-                } else {
-                    fwrite( $fp, '^ Clé externe | |' . PHP_EOL );
-                }
-                 */
-                //                fwrite( $fp, '^ Valeur nulle | |' . PHP_EOL );
-                fwrite( $fp, '^ Valeur par défaut | ' . $field->getDefault() . ' |' . PHP_EOL );
+                fwrite( $fp, '^ Valeur par défaut | ' . $field[ 'default' ] . ' |' . PHP_EOL );
 
-                if( /*field[ 'visibility' ] == 2*/ true === $isFirst ) {
+                if( true === $isFirst ) {
                     fwrite( $fp, '^ Auto-incrément | Oui |' . PHP_EOL . PHP_EOL );
                 } else {
                     fwrite( $fp, '^ Auto-incrément | |' . PHP_EOL . PHP_EOL );

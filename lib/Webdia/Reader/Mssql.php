@@ -1,24 +1,21 @@
 <?php
 
-class Webdia_Reader_Mssql implements Webdia_Reader_Interface
-{
-    private $getopt;
-    private $database;
+// @todo Need a big refactoring.
 
-    public function __construct( \Zend\Console\GetOpt $getopt ) {
-        $this->getopt = $getopt;
-        $this->database = new Webdia_Database( 'default' );
+class Webdia_Reader_Mssql extends Webdia_Reader implements Webdia_Reader_Interface {
+    public function getTables() {
+        $tables = array();
+        return $tables;
     }
 
-    public function validateOptions() {
-        // @todo Verify that required options are there.
-         /*
-            if( !isset( $options[ 't' ] ) ) {
-                $oTables = array();
-            } else {
-                $oTables = explode( ',', $options[ 't' ] );
-            }
-          */
+    public function getViews() {
+        $views = array();
+        return $views;
+    }
+
+    public function getFields( $table ) {
+        $fields = array();
+        return $fields;
     }
 
 

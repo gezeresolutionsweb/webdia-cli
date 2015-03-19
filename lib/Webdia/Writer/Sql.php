@@ -1,65 +1,34 @@
 <?php
 
-class Webdia_Writer_Sql implements Webdia_Writer_Interface
-{
-    private $getopt;
-
-    public function __construct( \Zend\Console\Getopt $getopt ) { 
-        $this->getopt = $getopt;
-    }
-
-    public function write( Webdia_Database $database ) {
+class Webdia_Writer_Sql extends Webdia_Writer implements Webdia_Writer_Interface {
+    public function write() {
         $fp = fopen( $this->getopt->of, 'w' );
 
-        foreach( $database->getTables() as $table ) {
-            fwrite( $fp, 'CREATE TABLE IF NOT EXISTS `' . $table->getName() . '` (' . PHP_EOL );
+        foreach( $this->reader->getTables() as $table ) {
+            fwrite( $fp, 'CREATE TABLE IF NOT EXISTS `' . $table[ 'name' ] . '` (' . PHP_EOL );
 
             $primarykey = '';
             $isFirst = true;
 
-            foreach( $table->getFields() as $field ) {
+            foreach( $this->reader->getFields( $table[ 'name' ] ) as $field ) {
                 $isPrimaryKey = false;
                 $isExternalKey = false;
 
                 if( true === $isFirst ) {
                     $isFirst = false;
-                    $primaryKey = $field->getName();
-                    $isPrimaryKey = true;
-                }
-
-/*
-                switch( $field[ 'visibility' ] ) {
-                case 0:
-                    $isExternalKey = true;
-                    break;
-                case 2:
-                    $isPrimaryKey = true;
                     $primaryKey = $field[ 'name' ];
-                    break;
+                    $isPrimaryKey = true;
                 }
- */
 
-                $fieldLine = '`' . $field->getName() . '` ';
-                $fieldLine .= $field->getType();
+                $fieldLine = '`' . $field[ 'name' ] . '` ';
+                $fieldLine .= $field[ 'type' ];
 
-                if( /*$isPrimaryKey || $isExternalKey || */ $field->getType() === 'int(10)' ) {
+                if( $field[ 'type' ] === 'int(10)' ) {
                     $fieldLine .= ' unsigned ';
                 }
-                /*
-                if( $field[ 'value' ] !== '' ) {
-                    $fieldLine .= ' NOT NULL DEFAULT \'' . $field[ 'value' ] . '\'';
-                } else {
-                    $fieldLine .= ' NOT NULL';
-                }
-                 */
                 if( $isPrimaryKey ) {
                     $fieldLine .= ' auto_increment';
                 }
-                /*
-                if( !empty( $field->comment ) ) {
-                    $fieldLine .= ' COMMENT \'' . mysql_real_escape_string( $field['comment'] ) . '\'';
-                }
-                 */
                 $fieldLine .= ',';
                 $fieldLine .= PHP_EOL;
 

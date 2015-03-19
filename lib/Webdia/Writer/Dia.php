@@ -1,13 +1,6 @@
 <?php
 
-class Webdia_Writer_Dia implements Webdia_Writer_Interface
-{
-    private $getopt;
-
-    public function __construct( \Zend\Console\Getopt $getopt ) { 
-        $this->getopt = $getopt;
-    }
-
+class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface {
     protected function getHeader() {
         $header = '<?xml version="1.0" encoding="UTF-8"?>
             <dia:diagram xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
@@ -194,7 +187,7 @@ class Webdia_Writer_Dia implements Webdia_Writer_Interface
         return $attribute;
     }
 
-    protected function genXml( Webdia_Database $database ) {
+    protected function genXml() {
         $left = 1.0;
         $top = 5.0;
         $x1 = $left;
@@ -205,12 +198,12 @@ class Webdia_Writer_Dia implements Webdia_Writer_Interface
         $height = 30;
         $x3 = $x2 + $width + 0.1;
         $y3 = $y2 + $height + 0.1;
-        $xinc = 15;
-        $yinc = 40;
+        $xinc = 5;
+        $yinc = 10;
 
         $xml = $this->getHeader();
 
-        foreach( $database->getTables() as $table ) {
+        foreach( $this->reader->getTables() as $table ) {
             // Calculate position.
             $x1 += $xinc;
             $x2 += $xinc;
@@ -224,10 +217,10 @@ class Webdia_Writer_Dia implements Webdia_Writer_Interface
                 $y3 += $yinc;
             }
 
-            $xml .= $this->getObjectHeader( $x1, $y1, $x2, $y2, $x3, $y3, $width, $height, $table->getName() );
+            $xml .= $this->getObjectHeader( $x1, $y1, $x2, $y2, $x3, $y3, $width, $height, $table[ 'name' ] );
 
-            foreach( $table->getFields() as $field ) {
-                $xml .= $this->getAttribute( $field->getName(), $field->getType(), $field->getDefault() );
+            foreach( $this->reader->getFields( $table[ 'name' ] ) as $field ) {
+                $xml .= $this->getAttribute( $field[ 'name' ], $field[ 'type' ], $field[ 'default' ] );
             }
 
             $xml .= $this->getObjectFooter();
@@ -238,13 +231,16 @@ class Webdia_Writer_Dia implements Webdia_Writer_Interface
         return $xml;
     }
 
-    public function write( Webdia_Database $database ) {
-        // @todo Validate getopt require options
-
+    public function write() {
         // generate xml
-        $xml = $this->genXml( $database );
+        $xml = $this->genXml();
 
-        $fp = fopen( $this->getopt->of, 'w' );
+        $filename = 'output.dia';
+        if( !empty( $this->getopt->of ) ) {
+            $filename = $this->getopt->of;
+        }
+
+        $fp = fopen( $filename, 'w' );
         fwrite( $fp, $xml );
     }
 }
