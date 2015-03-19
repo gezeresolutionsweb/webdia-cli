@@ -1,7 +1,6 @@
-# webdia
-An online database modeling and command line tools (dia, sql)
+# Webdia 0.3.0
 
-# webdia 0.3.0
+An online database modeling and command line tools (dia, sql)
 
 Copyright © 2010-2015 Sylvain Lévesque
 
