@@ -95,6 +95,6 @@ Sylvain Lévesque <slevesque@gezere.com>
 * Added support for default values in dia2sql, sql2dia and dia2wiki.
 * Removed .php extension to console script.
 
-### Version 0.1
+### 0.1.0
 
 * Initial version
