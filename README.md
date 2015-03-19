@@ -75,10 +75,9 @@ Sylvain Lévesque <slevesque@gezere.com>
 
 
 
-## VERIONS HISTORY
+## VERSIONS HISTORY
 
-Version 0.3.0
--------------
+### 0.3.0
 
 * Major refactoring in PHP 5 complying with PSR-0
 * Integration of some Gezere Library and Zend Framwork classes.
@@ -87,18 +86,15 @@ Version 0.3.0
 * Webdia command line parameters has completely changed.
 * You can now use Webdia on the command line with some colors :)
 
-Version 0.2.0
--------------
+### 0.2.0
 
 * Added mssql2dia command line tools.
 
-Version 0.1.2
--------------
+### 0.1.2
 
 * Added support for default values in dia2sql, sql2dia and dia2wiki.
 * Removed .php extension to console script.
 
-Version 0.1
------------
+### Version 0.1
 
 * Initial version
