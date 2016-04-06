@@ -1,8 +1,8 @@
 <?php
 
 class Webdia_App {
-    protected $version = '0.1.0 (Tremblay)';
-    protected $copyright = 'Copyright © 2010-2015 Sylvain Lévesque';
+    protected $version = '0.2.0 (Tremblay)';
+    protected $copyright = 'Copyright © 2010-2016 Sylvain Lévesque';
     protected $argv;
     protected $getopt;
 
