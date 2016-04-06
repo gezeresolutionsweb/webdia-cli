@@ -1,14 +1,22 @@
 {
     "name": "gezeresolutionsweb/webdia",
     "description": "A web based database modeling and command line tools (dia, sql)",
-    "type": "php",
-    "license": "GPL",
+    "type": "project",
+    "license": "MIT",
+    "keywords": ["webapp","diagram","php","sql","dia","modeling","database","wiki","mysql","mssql","cli","tools","html5"],
     "authors": [
         {
             "name": "Sylvain Lévesque",
-            "email": "slevesque@gezere.com"
+            "email": "slevesque@gezere.com",
+            "homepage": "http://www.gezere.com",
+            "role": "Developer"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "minimum-stability": "dev"
 }
