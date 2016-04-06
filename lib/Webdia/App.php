@@ -11,6 +11,7 @@ class Webdia_App {
         'i=w' => 'Input format',
         'o=w' => 'Output format',
         't=s' => 'Tables limitation',
+        's=s' => 'Yaml settings file',
         'help|h' => 'Help',
         'version|v' => 'Version',
         'if=s' => 'Input filename',
@@ -67,6 +68,16 @@ class Webdia_App {
             $outputFormat = $this->getopt->o;
         }
 
+        // Output format
+        if( isset( $this->getopt->s ) && is_file($this->getopt->s) ) {
+            try {
+                $settings = Spyc::YAMLLoad($this->getopt->s);
+            } catch(Exception $e) {
+                $this->echoc('Yaml error: ' . $e->getMessage() . PHP_EOL, 'light_red');
+                die();
+            }
+        }
+
         // Determine adequate reader
         $classname = 'Webdia_Reader_' . ucfirst( $inputFormat );
         $reader = new $classname( $this->getopt );
@@ -77,7 +88,6 @@ class Webdia_App {
         $writer->write();
     }
 
-    // Echo colored string;
     private function echoc( $string, $fgcolor = null, $bgcolor = null ) {
         echo $this->c->getColoredString( $string, $fgcolor, $bgcolor );
     }
