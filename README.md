@@ -1,8 +1,8 @@
-# Webdia 0.1.0 (Tremblay)
+# Webdia 0.2 (Tremblay)
 
-An online database modeling and command line tools (dia, sql)
+A web based database modeling and command line tools (dia, sql)
 
-Copyright © 2010-2015 Sylvain Lévesque
+Copyright © 2010-2016 Sylvain Lévesque
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,9 +33,9 @@ We are not affiliated in any ways with thoses projects.
 
 ## What's this ?
 
-Webdia is a command line tools that transform database schema from multiple source to multiple destination format. Supported sources are: Dia (UML), Mysql, Mssql. Supported destination are: Dia (UML), Sql, Wiki (Dokuwiki).  Each tables are represented as UML class and each fields are reprenseted as UML class attributes.
+Webdia is a command line tools that transform database schema from multiple sources to multiple destinations format. Supported sources are: Dia (UML), Mysql, Mssql. Supported destination are: Dia (UML), Sql, Wiki (Dokuwiki).
 
-You can read MILESTONES section down ther to see what's next ! Contributions are welcome. Any suggestions ?
+You can read MILESTONES section down there to see what's next ! Contributions are welcome. Any suggestions ?
 
 Sylvain Lévesque <slevesque@gezere.com>
 
@@ -45,7 +45,7 @@ Sylvain Lévesque <slevesque@gezere.com>
     * Linux Operating System (i'm using Ubuntu)
     * PHP 5.x
     * PHP CLI (Command line interpreter)
-    * MySQL and existing databases (with access to it)
+    * MySQL (for the web interface)
 
 
 ## MILESTONES
@@ -55,6 +55,7 @@ Sylvain Lévesque <slevesque@gezere.com>
   * Deliver initial release.
   * Complete basic CLI tools.
   * Complete basic CLI readers and writers.
+  * Add custom settings file to defined the way we should render the output.
   * Package the application the right way.
 
 ### 1.x (Gagnon)
@@ -67,7 +68,7 @@ Sylvain Lévesque <slevesque@gezere.com>
 ### 2.x (Roy)
 
   * Manager user access.
-  * Hava some collaboration in the webapp.
+  * Have some collaboration in the webapp.
   * Use dia stencils.
 
 ### 3.x (Côté)
@@ -77,6 +78,10 @@ Sylvain Lévesque <slevesque@gezere.com>
 
 
 ## VERSIONS HISTORY
+
+### 0.2.0 (Tremblay)
+
+* Implement a custom settings file to defined the way we should render the output.
 
 ### 0.1.0 (Tremblay)
 
