@@ -1,0 +1,14 @@
+{
+    "name": "gezeresolutionsweb/webdia",
+    "description": "A web based database modeling and command line tools (dia, sql)",
+    "type": "php",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Sylvain Lévesque",
+            "email": "slevesque@gezere.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
