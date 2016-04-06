@@ -1,11 +1,9 @@
 #!/usr/bin/php
 <?php
-// Helper constants
-define( 'DS', DIRECTORY_SEPARATOR );
-define( 'PS', PATH_SEPARATOR );
-
-define( 'ROOT_PATH', dirname( __FILE__ ) . DS );
-define( 'LIBRARY_PATH', ROOT_PATH . 'lib' . DS );
+define('DS', DIRECTORY_SEPARATOR);
+define('PS', PATH_SEPARATOR);
+define('ROOT_PATH', dirname(__FILE__) . DS);
+define('LIBRARY_PATH', ROOT_PATH . 'lib' . DS);
 
 // Set autoloading
 require LIBRARY_PATH . 'Gezere' . DS . 'Autoloader.php';
@@ -13,5 +11,8 @@ $autoloader = new Gezere_Autoloader();
 $autoloader->addPath( LIBRARY_PATH );
 $autoloader->register();
 
-$webdia = new Webdia_App( $_SERVER[ 'argv' ] );
+// Load composer autoload.
+require __DIR__ . DS . 'vendor' . DS . 'autoload.php';
+
+$webdia = new Webdia_App($_SERVER['argv']);
 $webdia->run();
