@@ -1,6 +1,6 @@
 # Webdia 0.2 (Tremblay)
 
-A web based database modeling and command line tools (dia, sql)
+CLI php tools to transform database model from source to destination (dia, mysql, sql)
 
 ## Notice
 
