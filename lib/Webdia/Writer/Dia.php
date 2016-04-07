@@ -305,7 +305,7 @@ class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
             $x1 += $xinc;
             $x2 += $xinc;
             $x3 += $xinc;
-            if ($x1 > ($left+(10*$xinc))) {
+            if ($x1 > ($left+(20*$xinc))) {
                 $x1 = $left;
                 $x2 = $x1 - 0.05;
                 $x3 = $x2 + $width + 0.1;
