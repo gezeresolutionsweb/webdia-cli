@@ -1,4 +1,4 @@
-# Webdia 0.2 (Tremblay)
+# webdia-cli 0.2 (Tremblay)
 
 CLI php tools to transform database model from source to destination (dia, mysql, sql)
 
@@ -17,7 +17,7 @@ We are not affiliated in any ways with thoses projects.
 
 ## What's this ?
 
-Webdia is a command line tools that transform database schema from multiple sources to multiple destinations format. Supported sources are: Dia (UML), Mysql, Mssql. Supported destination are: Dia (UML), Sql, Wiki (Dokuwiki).
+Webdia-cli is a command line tools that transform database schema from multiple sources to multiple destinations format. Supported sources are: Dia (UML), Mysql, Mssql. Supported destination are: Dia (UML), Sql, Wiki (Dokuwiki).
 
 You can read MILESTONES section down there to see what's next ! Contributions are welcome. Any suggestions ?
 
@@ -29,7 +29,6 @@ Sylvain Lévesque <slevesque@gezere.com>
     * Linux Operating System (i'm using Ubuntu)
     * PHP 5.x
     * PHP CLI (Command line interpreter)
-    * MySQL (for the web interface)
 
 
 ## MILESTONES
