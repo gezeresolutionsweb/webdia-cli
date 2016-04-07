@@ -5,7 +5,7 @@ class Webdia_Reader_Mysql extends Webdia_Reader implements Webdia_Reader_Interfa
 
     public function __construct( \Zend\Console\GetOpt $getopt ) {
         parent::__construct( $getopt );
-        $this->db = new Gezere_Database( $this->getopt->idsn ) or die( 'Can\'t get mysql connexion !' . PHP_EOL );
+        $this->db = new Gezere_Database( $this->getopt->idsn ) or die( "Can't get mysql connexion !" . PHP_EOL );
     }
 
     public function getTables() {
