@@ -1,6 +1,6 @@
 # webdia-cli 0.2 (Tremblay)
 
-CLI php tools to transform database model from source to destination (dia, mysql, sql)
+CLI tools to transform database model from source to destination. (dia, mysql, sql)
 
 ## Notice
 
