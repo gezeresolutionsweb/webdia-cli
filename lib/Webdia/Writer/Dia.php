@@ -1,6 +1,7 @@
 <?php
 
-class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface {
+class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
+{
     protected function getHeader() {
         $header = '<?xml version="1.0" encoding="UTF-8"?>
             <dia:diagram xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
@@ -86,6 +87,16 @@ class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
     }
 
     protected function getObjectHeader( $x1, $y1, $x2, $y2, $x3, $y3, $width, $height, $name, $comment ) {
+        $fillColor = '#FFFFFF';
+        if(!empty($this->settings['colors'])) {
+            foreach($this->settings['colors'] as $k => $v) {
+                if(preg_match($k, $name)) {
+                    $fillColor = $v;
+                    break;
+                }
+            }
+        }
+
         $objectHeader = '<dia:object type="Database - Table" version="0" id="o0' . uniqid() . '">
             <dia:attribute name="obj_pos">
             <dia:point val="' . $x1 . ',' . $y1 . '"/>
@@ -112,7 +123,7 @@ class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
             <dia:color val="#000000"/>
             </dia:attribute>
             <dia:attribute name="fill_colour">
-            <dia:color val="#ffffff"/>
+            <dia:color val="' . $fillColor . '"/>
             </dia:attribute>
             <dia:attribute name="line_width">
             <dia:real val="0.10000000000000001"/>

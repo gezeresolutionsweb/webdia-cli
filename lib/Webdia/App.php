@@ -69,6 +69,7 @@ class Webdia_App {
         }
 
         // Output format
+        $settings = null;
         if( isset( $this->getopt->s ) && is_file($this->getopt->s) ) {
             try {
                 $settings = Spyc::YAMLLoad($this->getopt->s);
@@ -84,7 +85,7 @@ class Webdia_App {
 
         // Determine adequate writer
         $classname = 'Webdia_Writer_' . ucfirst( $outputFormat );
-        $writer = new $classname( $this->getopt, $reader );
+        $writer = new $classname($this->getopt, $reader, $settings);
         $writer->write();
     }
 
