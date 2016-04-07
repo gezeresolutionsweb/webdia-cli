@@ -31,12 +31,13 @@
 class Gezere_Database {
     private $dsn;
     private $selectedDb;
+    private $link;
 
-    public function __construct( $dsn ) {
-        $this->dsn = self::parseDsn( $dsn );
-        $this->connect( $this->dsn[ 'server' ], $this->dsn[ 'user' ], $this->dsn[ 'password' ] );
-        $this->selectDb( $this->dsn[ 'database' ] );
-        $this->query( 'SET NAMES "UTF8"' );
+    public function __construct($dsn) {
+        $this->dsn = self::parseDsn($dsn);
+        $this->link = $this->connect($this->dsn['server'], $this->dsn['user'], $this->dsn['password']);
+        $this->selectDb($this->dsn['database'], $this->link);
+        $this->query('SET NAMES "UTF8"', $this->link);
     }
 
     public function getSelectedDb() {
@@ -111,21 +112,18 @@ class Gezere_Database {
         return mysqli_num_rows($result);
     }
 
-    public function query($query, $link = '') {  
-        if( $link != '' ) {
-            return mysqli_query($query, $link);
-        } else {
-            return mysqli_query($query);
+    public function query($query, $link = null) {  
+        $alink = $this->link;
+        if(!is_null($link)) {
+            $alink = $link;
         }
+
+        return mysqli_query($alink, $query);
     }
 
-    public function selectDb( $database, $link = '' ) {
+    public function selectDb($database, $link) {
         $this->selectedDb = $database;
-        if( $link != '' ) {
-            return mysqli_select_db($database, $link);
-        } else {
-            return mysqli_select_db($database);
-        }
+        return mysqli_select_db($link, $database);
     }
 
     public function dataSeek( $result, $rowNumber ) {
@@ -144,12 +142,13 @@ class Gezere_Database {
         return mysqli_fetch_field( $result, $i );
     }
 
-    public function queryAssoc( $query, $link = '' ) {
-        if($link != '') {
-            $elements = mysqli_query($query, $link);
-        } else {
-            $elements = mysqli_query( $query );
+    public function queryAssoc( $query, $link = null) {
+        $alink = $this->link;
+        if(!is_null($link)) {
+            $alink = $link;
         }
+
+        $elements = mysqli_query($alink, $query);
 
         $results = array();
         while( $element = $this->fetchAssoc( $elements ) ) {
@@ -159,23 +158,25 @@ class Gezere_Database {
         return $results;
     }
 
-    public function queryOne( $query, $link = '' ) {
-        if($link != '') {
-            $elements = mysqli_query($query, $link);
-        } else {
-            $elements = mysqli_query( $query );
+    public function queryOne( $query, $link = null) {
+        $alink = $this->link;
+        if(!is_null($link)) {
+            $alink = $link;
         }
+
+        $elements = mysqli_query($alink, $query);
 
         return $this->fetchAssoc( $elements );
     }
 
-    public function queryObject( $query, $link = '' )
+    public function queryObject($query, $link = null)
     {
-        if($link != '') {
-            $elements = mysqli_query($query, $link);
-        } else {
-            $elements = mysqli_query( $query );
+        $alink = $this->link;
+        if(!is_null($link)) {
+            $alink = $link;
         }
+
+        $elements = mysqli_query($alink, $query);
 
         $results = array();
         while( $element = $this->fetchObject( $elements ) )
@@ -186,12 +187,14 @@ class Gezere_Database {
         return $results;
     }
 
-    public function queryPairs( $query, $link = '' ) {
-        if($link != '') {
-            $elements = mysqli_query($query, $link);
-        } else {
-            $elements = mysqli_query( $query );
+    public function queryPairs( $query, $link = null)
+    {
+        $alink = $this->link;
+        if(!is_null($link)) {
+            $alink = $link;
         }
+
+        $elements = mysqli_query($alink, $query);
 
         $results = array();
         while( $element = $this->fetchArray( $elements ) ) {
@@ -201,14 +204,14 @@ class Gezere_Database {
         return $results;
     }
 
-    public function fetchMeta( $query, $link = '' ) {
-        if($link != '') {
-            $results = mysqli_query($query, $link);
-            $fields = mysqli_fetch_assoc( $results );
-        } else {
-            $results = mysqli_query( $query );
-            $fields = mysqli_fetch_assoc( $results );
+    public function fetchMeta($query, $link = null) {
+        $alink = $this->link;
+        if(!is_null($link)) {
+            $alink = $link;
         }
+
+        $results = mysqli_query($alink, $query);
+        $fields = mysqli_fetch_assoc( $results );
 
         $items = array();
         foreach( $fields as $field => $value ) {
@@ -219,7 +222,12 @@ class Gezere_Database {
         return $items;
     }
 
-    public function realEscapeString( $string ) {
-        return mysqli_real_escape_string( $string );
+    public function realEscapeString($string, $link = null) {
+        $alink = $this->link;
+        if(!is_null($link)) {
+            $alink = $link;
+        }
+
+        return mysqli_real_escape_string($alink, $string);
     }
 }
