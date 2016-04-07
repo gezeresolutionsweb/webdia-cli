@@ -2,6 +2,10 @@
 
 class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
 {
+    private $tables = null;
+    private $nbTables = 0;
+    private $references = [];
+
     protected function getHeader() {
         $header = '<?xml version="1.0" encoding="UTF-8"?>
             <dia:diagram xmlns:dia="http://www.lysator.liu.se/~alla/dia/">
@@ -87,6 +91,9 @@ class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
     }
 
     protected function getObjectHeader( $x1, $y1, $x2, $y2, $x3, $y3, $width, $height, $name, $comment ) {
+        // Push id and table name in the reference array.
+        $this->references[$name] = 'O' . $this->nbTables;
+
         $fillColor = '#FFFFFF';
         if(!empty($this->settings['colors'])) {
             foreach($this->settings['colors'] as $k => $v) {
@@ -97,74 +104,79 @@ class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
             }
         }
 
-        $objectHeader = '<dia:object type="Database - Table" version="0" id="o0' . uniqid() . '">
+//        $objectHeader = '<dia:object type="Database - Table" version="0" id="O0' . uniqid() . '">
+//        $objectHeader = '<dia:object type="Database - Table" version="0" id="' . $name . '">
+        $objectHeader = '<dia:object type="Database - Table" version="0" id="O' . $this->nbTables . '">
             <dia:attribute name="obj_pos">
-            <dia:point val="' . $x1 . ',' . $y1 . '"/>
+                <dia:point val="' . $x1 . ',' . $y1 . '"/>
             </dia:attribute>
             <dia:attribute name="obj_bb">
-            <dia:rectangle val="' . $x2 . ',' . $y2 . ';' . $x3 . ',' . $y3 . '"/>
+                <dia:rectangle val="' . $x2 . ',' . $y2 . ';' . $x3 . ',' . $y3 . '"/>
             </dia:attribute>
             <dia:attribute name="meta">
-            <dia:composite type="dict"/>
+                <dia:composite type="dict"/>
             </dia:attribute>
             <dia:attribute name="elem_corner">
-            <dia:point val="' . $x1 . ',' . $y1 . '"/>
+                <dia:point val="' . $x1 . ',' . $y1 . '"/>
             </dia:attribute>
             <dia:attribute name="elem_width">
-            <dia:real val="' . $width . '"/>
+                <dia:real val="' . $width . '"/>
             </dia:attribute>
             <dia:attribute name="elem_height">
-            <dia:real val="' . $height . '"/>
+                <dia:real val="' . $height . '"/>
             </dia:attribute>
             <dia:attribute name="text_colour">
-            <dia:color val="#000000"/>
+                <dia:color val="#000000"/>
             </dia:attribute>
             <dia:attribute name="line_colour">
-            <dia:color val="#000000"/>
+                <dia:color val="#000000"/>
             </dia:attribute>
             <dia:attribute name="fill_colour">
-            <dia:color val="' . $fillColor . '"/>
+                <dia:color val="' . $fillColor . '"/>
             </dia:attribute>
             <dia:attribute name="line_width">
-            <dia:real val="0.10000000000000001"/>
+                <dia:real val="0.10000000000000001"/>
             </dia:attribute>
             <dia:attribute name="name">
-            <dia:string>#' . $name . '#</dia:string>
+                <dia:string>#' . $name . '#</dia:string>
             </dia:attribute>
             <dia:attribute name="comment">
-            <dia:string>#' . htmlspecialchars( $comment ) . '#</dia:string>
+                <dia:string>#' . htmlspecialchars( $comment ) . '#</dia:string>
             </dia:attribute>
             <dia:attribute name="visible_comment">
-            <dia:boolean val="false"/>
+                <dia:boolean val="false"/>
             </dia:attribute>
             <dia:attribute name="tagging_comment">
-            <dia:boolean val="false"/>
+                <dia:boolean val="false"/>
             </dia:attribute>
             <dia:attribute name="underline_primary_key">
-            <dia:boolean val="true"/>
+                <dia:boolean val="true"/>
             </dia:attribute>
             <dia:attribute name="bold_primary_keys">
-            <dia:boolean val="true"/>
+                <dia:boolean val="true"/>
             </dia:attribute>
             <dia:attribute name="normal_font">
-            <dia:font family="monospace" style="0" name="courier"/>
+                <dia:font family="monospace" style="0" name="courier"/>
             </dia:attribute>
             <dia:attribute name="name_font">
-            <dia:font family="sans" style="80" name="helvetica-bold"/>
+                <dia:font family="sans" style="80" name="helvetica-bold"/>
             </dia:attribute>
             <dia:attribute name="comment_font">
-            <dia:font family="sans" style="8" name="helvetica-oblique"/>
+                <dia:font family="sans" style="8" name="helvetica-oblique"/>
             </dia:attribute>
             <dia:attribute name="normal_font_height">
-            <dia:real val="0.80000000000000004"/>
+                <dia:real val="0.80000000000000004"/>
             </dia:attribute>
             <dia:attribute name="name_font_height">
-            <dia:real val="0.69999999999999996"/>
+                <dia:real val="0.69999999999999996"/>
             </dia:attribute>
             <dia:attribute name="comment_font_height">
-            <dia:real val="0.69999999999999996"/>
+                <dia:real val="0.69999999999999996"/>
             </dia:attribute>
             <dia:attribute name="attributes">';
+
+        // Increment nbTables variables.
+        $this->nbTables++;
 
         return $objectHeader;
     }
@@ -188,68 +200,111 @@ class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
       $connection = '<dia:connection handle="0" to="O0" connection="15"/>';
     }
      */
-    public function getDatabaseReference() {
 
-        $databaseReference = '<dia:object type="Database - Reference" version="0" id="O2">
+    public function getReferences()
+    {
+        $xml = '';
+        if(!empty($this->settings['relations'])) {
+            foreach($this->settings['relations'] as $from => $v) {
+                if(!empty($v['has_one'])) {
+                    foreach($v['has_one'] as $to) {
+                        $xml .= $this->getDatabaseReferenceObject('has_one', $from, $to);
+                    }
+                }
+
+                if(!empty($v['has_many'])) {
+                    foreach($v['has_many'] as $to) {
+                        $xml .= $this->getDatabaseReferenceObject('has_many', $from, $to);
+                    }
+                }
+
+                if(!empty($v['belongs_to'])) {
+                    foreach($v['belongs_to'] as $to) {
+                        $xml .= $this->getDatabaseReferenceObject('belongs_to', $from, $to);
+                    }
+                }
+
+                if(!empty($v['has_and_belongs_to_many'])) {
+                    foreach($v['has_and_belongs_to_many'] as $to) {
+                        $xml .= $this->getDatabaseReferenceObject('has_and_belongs_to_many', $from, $to);
+                    }
+                }
+            }
+        }
+
+        return $xml;
+    }
+
+    public function getDatabaseReferenceObject($type, $from, $to)
+    {
+        // @todo Do something with the type.
+        // @todo Verify if there is a reference in the $references array else return nothing.
+
+        $databaseReference = '<dia:object type="Database - Reference" version="0" id="O' . $this->nbTables . '">
             <dia:attribute name="obj_pos">
-            <dia:point val="20.96,16.25"/>
+                <dia:point val="20.96,16.25"/>
             </dia:attribute>
             <dia:attribute name="obj_bb">
-            <dia:rectangle val="20.96,14.9;33.5,16.25"/>
+                <dia:rectangle val="20.96,14.9;33.5,16.25"/>
             </dia:attribute>
             <dia:attribute name="meta">
-            <dia:composite type="dict"/>
+                <dia:composite type="dict"/>
             </dia:attribute>
             <dia:attribute name="orth_points">
-            <dia:point val="20.96,16.25"/>
-            <dia:point val="27.23,16.25"/>
-            <dia:point val="27.23,15.55"/>
-            <dia:point val="33.5,15.55"/>
+                <dia:point val="20.96,16.25"/>
+                <dia:point val="27.23,16.25"/>
+                <dia:point val="27.23,15.55"/>
+                <dia:point val="33.5,15.55"/>
             </dia:attribute>
             <dia:attribute name="orth_orient">
-            <dia:enum val="0"/>
-            <dia:enum val="1"/>
-            <dia:enum val="0"/>
+                <dia:enum val="0"/>
+                <dia:enum val="1"/>
+                <dia:enum val="0"/>
             </dia:attribute>
             <dia:attribute name="orth_autoroute">
-            <dia:boolean val="false"/>
+                <dia:boolean val="true"/>
             </dia:attribute>
             <dia:attribute name="text_colour">
-            <dia:color val="#000000"/>
+                <dia:color val="#000000"/>
             </dia:attribute>
             <dia:attribute name="line_colour">
-            <dia:color val="#000000"/>
+                <dia:color val="#000000"/>
             </dia:attribute>
             <dia:attribute name="line_width">
-            <dia:real val="0.10000000000000001"/>
+                <dia:real val="0.10000000000000001"/>
             </dia:attribute>
             <dia:attribute name="line_style">
-            <dia:enum val="0"/>
-            <dia:real val="1"/>
+                <dia:enum val="0"/>
+                <dia:real val="1"/>
             </dia:attribute>
             <dia:attribute name="corner_radius">
-            <dia:real val="0"/>
+                <dia:real val="0"/>
             </dia:attribute>
             <dia:attribute name="end_arrow">
-            <dia:enum val="0"/>
+                <dia:enum val="0"/>
             </dia:attribute>
             <dia:attribute name="start_point_desc">
-            <dia:string>#0..n#</dia:string>
+                <dia:string>#0..n#</dia:string>
             </dia:attribute>
             <dia:attribute name="end_point_desc">
-            <dia:string>#1#</dia:string>
+                <dia:string>#1#</dia:string>
             </dia:attribute>
             <dia:attribute name="normal_font">
-            <dia:font family="monospace" style="0" name="Courier"/>
+                <dia:font family="monospace" style="0" name="Courier"/>
             </dia:attribute>
             <dia:attribute name="normal_font_height">
-            <dia:real val="0.59999999999999998"/>
+                <dia:real val="0.59999999999999998"/>
             </dia:attribute>
             <dia:connections>
-            <dia:connection handle="0" to="O0" connection="15"/>
-            <dia:connection handle="1" to="O1" connection="12"/>
+                <dia:connection handle="0" to="' . $this->references[$from] . '" connection="13"/>
+                <dia:connection handle="1" to="' . $this->references[$to] . '" connection="12"/>
             </dia:connections>
-            </dia:object>';
+        </dia:object>';
+
+        // @todo Find the right number for the connection for both side of the connection according to type and if we want $from table on the left or on the right.
+
+        $this->nbTables++;
+
         return $databaseReference;
     }
 
@@ -300,7 +355,8 @@ class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
 
         $xml = $this->getHeader();
 
-        foreach( $this->reader->getTables() as $table ) {
+        $this->tables = $this->reader->getTables();
+        foreach($this->tables as $table) {
             // Calculate position.
             $x1 += $xinc;
             $x2 += $xinc;
@@ -323,7 +379,7 @@ class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
             $xml .= $this->getObjectFooter();
         }
 
-        $xml .= $this->getDatabaseReference();
+        $xml .= $this->getReferences();
 
         $xml .= $this->getFooter();
 
@@ -343,4 +399,3 @@ class Webdia_Writer_Dia extends Webdia_Writer implements Webdia_Writer_Interface
         fwrite( $fp, $xml );
     }
 }
-
