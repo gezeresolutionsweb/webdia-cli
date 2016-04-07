@@ -64,91 +64,91 @@ class Gezere_Database {
 
     public function close( $link = '' ) {
         if($link != '') {
-            return mysql_close($link);
+            return mysqli_close($link);
         } else {
-            return mysql_close();
+            return mysqli_close();
         }
     }
 
     public function connect( $server = 'localhost', $user = '', $password = '', $newLink = false, $clientFlags = 0 ) {
-        return mysql_connect($server, $user, $password, $newLink, $clientFlags);
+        return mysqli_connect($server, $user, $password, $newLink, $clientFlags);
     }
 
     public function error( $link = '' ) {
         if($link != '') {
-            return mysql_error($link);
+            return mysqli_error($link);
         } else {
-            return mysql_error();
+            return mysqli_error();
         }
     }
 
     public function fetchArray( $result, $resultType = '' )
     {
         if( $resultType != '' ) {
-            return mysql_fetch_array($result, $resultType);
+            return mysqli_fetch_array($result, $resultType);
         } else {
-            return mysql_fetch_array($result);
+            return mysqli_fetch_array($result);
         }
     }
 
     public function fetchObject( $result ) {
-        return mysql_fetch_object($result);
+        return mysqli_fetch_object($result);
     }
 
     public function fetchRow( $result ) {
-        return mysql_fetch_row( $result );
+        return mysqli_fetch_row( $result );
     }
 
     public function insertId($link = '') {
         if($link != '') {
-            return mysql_insert_id($link);
+            return mysqli_insert_id($link);
         } else {
-            return mysql_insert_id();
+            return mysqli_insert_id();
         }
     }
 
     public function numRows($result) {
-        return mysql_num_rows($result);
+        return mysqli_num_rows($result);
     }
 
     public function query($query, $link = '') {  
         if( $link != '' ) {
-            return mysql_query($query, $link);
+            return mysqli_query($query, $link);
         } else {
-            return mysql_query($query);
+            return mysqli_query($query);
         }
     }
 
     public function selectDb( $database, $link = '' ) {
         $this->selectedDb = $database;
         if( $link != '' ) {
-            return mysql_select_db($database, $link);
+            return mysqli_select_db($database, $link);
         } else {
-            return mysql_select_db($database);
+            return mysqli_select_db($database);
         }
     }
 
     public function dataSeek( $result, $rowNumber ) {
-        return mysql_data_seek( $result, $rowNumber );
+        return mysqli_data_seek( $result, $rowNumber );
     }
 
     public function fetchAssoc( $result ) {
-        return mysql_fetch_assoc( $result );
+        return mysqli_fetch_assoc( $result );
     }
 
     public function numFields( $result ) {
-        return mysql_num_fields( $result );
+        return mysqli_num_fields( $result );
     }
 
     public function fetchField( $result, $i ) {
-        return mysql_fetch_field( $result, $i );
+        return mysqli_fetch_field( $result, $i );
     }
 
     public function queryAssoc( $query, $link = '' ) {
         if($link != '') {
-            $elements = mysql_query($query, $link);
+            $elements = mysqli_query($query, $link);
         } else {
-            $elements = mysql_query( $query );
+            $elements = mysqli_query( $query );
         }
 
         $results = array();
@@ -161,9 +161,9 @@ class Gezere_Database {
 
     public function queryOne( $query, $link = '' ) {
         if($link != '') {
-            $elements = mysql_query($query, $link);
+            $elements = mysqli_query($query, $link);
         } else {
-            $elements = mysql_query( $query );
+            $elements = mysqli_query( $query );
         }
 
         return $this->fetchAssoc( $elements );
@@ -172,9 +172,9 @@ class Gezere_Database {
     public function queryObject( $query, $link = '' )
     {
         if($link != '') {
-            $elements = mysql_query($query, $link);
+            $elements = mysqli_query($query, $link);
         } else {
-            $elements = mysql_query( $query );
+            $elements = mysqli_query( $query );
         }
 
         $results = array();
@@ -188,9 +188,9 @@ class Gezere_Database {
 
     public function queryPairs( $query, $link = '' ) {
         if($link != '') {
-            $elements = mysql_query($query, $link);
+            $elements = mysqli_query($query, $link);
         } else {
-            $elements = mysql_query( $query );
+            $elements = mysqli_query( $query );
         }
 
         $results = array();
@@ -203,11 +203,11 @@ class Gezere_Database {
 
     public function fetchMeta( $query, $link = '' ) {
         if($link != '') {
-            $results = mysql_query($query, $link);
-            $fields = mysql_fetch_assoc( $results );
+            $results = mysqli_query($query, $link);
+            $fields = mysqli_fetch_assoc( $results );
         } else {
-            $results = mysql_query( $query );
-            $fields = mysql_fetch_assoc( $results );
+            $results = mysqli_query( $query );
+            $fields = mysqli_fetch_assoc( $results );
         }
 
         $items = array();
@@ -220,6 +220,6 @@ class Gezere_Database {
     }
 
     public function realEscapeString( $string ) {
-        return mysql_real_escape_string( $string );
+        return mysqli_real_escape_string( $string );
     }
 }
