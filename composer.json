@@ -1,9 +1,9 @@
 {
-    "name": "gezeresolutionsweb/webdia",
-    "description": "A web based database modeling and command line tools (dia, sql)",
+    "name": "gezeresolutionsweb/webdia-cli",
+    "description": "CLI tools to transform database model from source to destination. (dia, mysql, sql)",
     "type": "project",
     "license": "MIT",
-    "keywords": ["webapp","diagram","php","sql","dia","modeling","database","wiki","mysql","mssql","cli","tools","html5"],
+    "keywords": ["webdia-cli","cli","diagram","php","sql","dia","modeling","database","wiki","mysql","mssql","cli","tools"],
     "authors": [
         {
             "name": "Sylvain Lévesque",
