@@ -32,6 +32,7 @@ class Webdia_App {
     const OUTPUT_DIA = 'dia';
     const OUTPUT_WIKI = 'wiki';
     const OUTPUT_MYSQL = 'mysql';
+    const OUTPUT_REFERENCES = 'references';
 
     // Member variable to hold CLI color class instance.
     protected $c;
@@ -144,6 +145,7 @@ class Webdia_App {
         $this->echoc( 'dia              DIA file. This is the default output format.' . PHP_EOL, 'light_gray' );
         $this->echoc( 'wiki             Dokuwiki formated text file. ' . PHP_EOL, 'light_gray' );
 //        $this->echoc( 'mysql            Mysql database. ' . PHP_EOL . PHP_EOL, 'light_gray' );
+        $this->echoc( 'settings         Yaml settings files. ' . PHP_EOL, 'light_gray' );
     }
 
     private function showHeader() {
