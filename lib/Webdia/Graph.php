@@ -1,3 +1,4 @@
+    "/t que ce protocole bénéficie d’une couche de chiffrement (SSL) qui sécurise le transport deenergy_/": "#00ff00"
 <?php
 
 namespace Webdia;
@@ -15,6 +16,7 @@ use \Webdia\Graph\Edge;
  * @see https://en.wikipedia.org/wiki/List_of_data_structures
  * @see http://www.sitepoint.com/data-structures-4/
  * @see http://www.codediesel.com/algorithms/building-a-graph-data-structure-in-php/
+ * @see http://www.codediesel.com/algorithms/building-a-adjacency-matrix-of-a-graph/
  * @see https://en.wikipedia.org/wiki/Tree_%28data_structure%29
  * @see https://en.wikipedia.org/wiki/Graph_drawing
  * @see composer search graph
